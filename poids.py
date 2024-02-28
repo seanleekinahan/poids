@@ -3,10 +3,11 @@ import pygame
 from random import uniform as ranf
 import math
 
+
 # Poid class
 class Poid(pygame.sprite.Sprite):
     # birds
-    bvars = {
+    options = {
         # (min, max, default)
         "num_birds": (1, 250, 32),
         "cohesion_range": (1, 100, 30),
@@ -30,7 +31,7 @@ class Poid(pygame.sprite.Sprite):
 
         # initial velocity and magnitude
         self.velocity = pygame.Vector2(0.5, 0.5).rotate(ranf(0, 360)).normalize()
-        self.velocity.scale_to_length(self.bvars["max_speed"][2])
+        self.velocity.scale_to_length(self.options["max_speed"][2])
         self.acceleration = pygame.Vector2(0, 0)
 
         # random per-bird attributes
@@ -53,11 +54,11 @@ class Poid(pygame.sprite.Sprite):
 
         for b in birds:
             d = self.get_distance(b)
-            if b is not self and self.bvars["cohesion_range"][2] > d:
+            if b is not self and self.options["cohesion_range"][2] > d:
                 alignment_force += b.velocity
                 cohesion_force += b.rect.center
 
-                if self.bvars["separation_distance"][2] > d:
+                if self.options["separation_distance"][2] > d:
                     pos = pygame.Vector2(self.rect.x, self.rect.y)
                     other_pos = pygame.Vector2(b.rect.x, b.rect.y)
                     separation_force += (pos - other_pos) / (d + 0.001)
@@ -72,9 +73,9 @@ class Poid(pygame.sprite.Sprite):
             alignment_force -= self.velocity
             cohesion_force -= self.rect.center
 
-        steering_force += alignment_force * self.bvars["align_factor"][2]
-        steering_force += cohesion_force * self.bvars["cohesion_factor"][2]
-        steering_force += separation_force * self.bvars["separation_factor"][2]
+        steering_force += alignment_force * self.options["align_factor"][2]
+        steering_force += cohesion_force * self.options["cohesion_factor"][2]
+        steering_force += separation_force * self.options["separation_factor"][2]
 
         if steering_force.length() > 0:
             steering_force.scale_to_length(self.strength)
@@ -89,11 +90,11 @@ class Poid(pygame.sprite.Sprite):
         self.velocity += self.acceleration
 
         # clamp vector magnitude
-        if self.velocity.magnitude() > self.bvars["max_speed"][2]:
-            self.velocity.scale_to_length(self.bvars["max_speed"][2])
+        if self.velocity.magnitude() > self.options["max_speed"][2]:
+            self.velocity.scale_to_length(self.options["max_speed"][2])
 
-        if self.velocity.magnitude() < self.bvars["min_speed"][2]:
-            self.velocity.scale_to_length(self.bvars["min_speed"][2])
+        if self.velocity.magnitude() < self.options["min_speed"][2]:
+            self.velocity.scale_to_length(self.options["min_speed"][2])
 
         # wrap around the screen
         if self.rect.left > self.cfg.width:

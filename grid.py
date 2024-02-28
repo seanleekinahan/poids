@@ -12,7 +12,7 @@ def create_grid(cfg):
         line.image = pygame.Surface((1, cfg.height))
         line.image.fill((255, 0, 0))
         line.rect = line.image.get_rect()
-        line.rect.left = cfg.cell_size * (i + 1)
+        line.rect.left = cfg.cell_size * i
         line.image.set_alpha(0.1*255)
         cells.add(line)
 
@@ -21,7 +21,7 @@ def create_grid(cfg):
         line.image = pygame.Surface((cfg.width, 1))
         line.image.fill((255, 0, 0))
         line.rect = line.image.get_rect()
-        line.rect.bottom = cfg.cell_size * (i + 1)
+        line.rect.bottom = cfg.cell_size * i
         line.image.set_alpha(0.1*255)
         cells.add(line)
 

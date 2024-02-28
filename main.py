@@ -26,7 +26,8 @@ clock = pygame.time.Clock()
 # Create the screen
 screen = pygame.display.set_mode((cfg.width, cfg.height))
 grid_list, grid_render = grid.create_grid(cfg)
-sliders = ui.init_sliders(screen, Poid.bvars)
+sliders = ui.init_sliders(screen, Poid.options)
+
 
 # Create birds
 birds_group = pygame.sprite.Group()
@@ -39,7 +40,8 @@ while running:
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             running = False
 
-    diff = len(birds_group) - Poid.bvars["num_birds"][2]
+    # smooth adjustment of visible birds
+    diff = len(birds_group) - Poid.options["num_birds"][2]
     if diff > 0:
         birds_group.remove(birds_group.sprites()[0])
 
@@ -56,8 +58,8 @@ while running:
 
     for slider in sliders:
         slider.valueBox.setText(slider.getValue())
-        tup = Poid.bvars[slider.name]
-        Poid.bvars[slider.name] = (tup[0], tup[1], slider.getValue())
+        tup = Poid.options[slider.name]
+        Poid.options[slider.name] = (tup[0], tup[1], slider.getValue())
 
     pygame.display.flip()
     pygame_widgets.update(events)

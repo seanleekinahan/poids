@@ -1,4 +1,4 @@
-class Config():
+class Config:
     def __init__(self, cfg):
         self.width = cfg["width"]
         self.height = cfg["height"]
