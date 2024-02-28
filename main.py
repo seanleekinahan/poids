@@ -1,5 +1,5 @@
 import pygame_widgets
-import ui
+import interface
 import grid
 from poids import *
 from config import *
@@ -14,8 +14,8 @@ clock = pygame.time.Clock()
 
 # Create the screen
 cfg["screen"] = pygame.display.set_mode((cfg["width"], cfg["height"]))
-cells, grid_render = grid.create_grid()
-sliders = ui.init_sliders()
+grid_lines = grid.create_gridlines()
+sliders = interface.init_sliders()
 
 
 # Create birds
@@ -37,8 +37,7 @@ while running:
     if diff < -1:
         birds.add(Poid())
 
-    # fix this bad code
-    cells = grid.clear_grid()
+    cells = grid.create_cells()
     grid.update_cells(cells, birds)
 
     for bird in birds:
@@ -47,7 +46,7 @@ while running:
     # draw
     cfg["screen"].fill((0, 0, 0))
     birds.draw(cfg["screen"])
-    grid_render.draw(cfg["screen"])
+    grid_lines.draw(cfg["screen"])
 
     for slider in sliders:
         slider.valueBox.setText(slider.getValue())
