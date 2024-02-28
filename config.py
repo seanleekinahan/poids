@@ -1,7 +1,21 @@
-class Config:
-    def __init__(self, cfg):
-        self.width = cfg["width"]
-        self.height = cfg["height"]
-        self.fps = cfg["target_fps"]
-        self.cell_size = cfg["cell_size"]
 
+cfg = {
+    "width": 1200,
+    "height": 800,
+    "fps": 24,
+    "cell_size": 50
+}
+
+options = {
+    # (min, max, default)
+    "num_birds": (1, 25000, 100),
+    "cohesion_range": (1, 100, 50),
+    "separation_distance": (1, 100, 15),
+    "min_speed": (0.1, 5, 1),
+    "max_speed": (5, 10, 5),
+    "align_factor": (0.1, 10, 1),
+    "cohesion_factor": (0.1, 10, 0.1),
+    "separation_factor": (0.1, 10, 10),
+    "view_angle": (1, 360, 220),
+    "drift": (0.0, 1.0, 0)
+}

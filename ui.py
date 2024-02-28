@@ -1,6 +1,7 @@
 import pygame_widgets
 from pygame_widgets.slider import Slider
 from pygame_widgets.textbox import TextBox
+from config import *
 
 class Group(Slider):
     def __init__(self, screen, x, y, width, height, name, v):
@@ -14,23 +15,21 @@ class Group(Slider):
         self.value = v[2]
 
 
-def init_sliders(cfg, options):
+def init_sliders():
 
     sliders = []
     items = options.items()
     total_options = len(items)
 
-
-
     xpos = 10
-    wid = (cfg.width / total_options) * 0.66
+    wid = (cfg["width"] / total_options) * 0.66
     incx = wid * 1.5
     height = 30
     ypos = 50
 
     for k, v in items:
 
-        slider = Group(cfg.screen, xpos, ypos, wid, height, k, v)
+        slider = Group(cfg["screen"], xpos, ypos, wid, height, k, v)
         sliders.append(slider)
 
         xpos += incx
