@@ -5,7 +5,6 @@ import grid
 from poids import *
 from config import *
 
-# TODO: Implement distance based force modifiers for cohesion & separation
 # TODO: Refactor nearby_bird checks to search local grid rather than all birds - chokes approaching 1000 birds currently
 # TODO - Stretch: Predators & Prey
 

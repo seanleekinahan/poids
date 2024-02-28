@@ -11,14 +11,14 @@ class Poid(pygame.sprite.Sprite):
         # (min, max, default)
         "num_birds": (1, 250, 100),
         "cohesion_range": (1, 100, 50),
-        "separation_distance": (1, 100, 25),
+        "separation_distance": (1, 100, 15),
         "min_speed": (0.1, 5, 1),
         "max_speed": (5, 10, 5),
-        "align_factor": (0.1, 10, 0.1),
+        "align_factor": (0.1, 10, 1),
         "cohesion_factor": (0.1, 10, 0.1),
-        "separation_factor": (0.1, 10, 0.1),
-        "view_angle": (1, 360, 180),
-        "drift":(0.0, 1.0, 0.5 )
+        "separation_factor": (0.1, 10, 10),
+        "view_angle": (1, 360, 220),
+        "drift": (0.0, 1.0, 0)
     }
 
     def __init__(self, cfg):
