@@ -5,7 +5,6 @@ import grid
 from poids import *
 from config import *
 
-# TODO: Implement forward vision cone to avoid cohesion & alignment with birds to rear.
 # TODO: Implement distance based force modifiers for cohesion & separation
 # TODO: Refactor nearby_bird checks to search local grid rather than all birds - chokes approaching 1000 birds currently
 # TODO - Stretch: Predators & Prey
@@ -24,9 +23,9 @@ pygame.display.set_caption("Poids")
 clock = pygame.time.Clock()
 
 # Create the screen
-screen = pygame.display.set_mode((cfg.width, cfg.height))
+cfg.screen = pygame.display.set_mode((cfg.width, cfg.height))
 grid_list, grid_render = grid.create_grid(cfg)
-sliders = ui.init_sliders(screen, Poid.options)
+sliders = ui.init_sliders(cfg, Poid.options)
 
 
 # Create birds
@@ -42,19 +41,19 @@ while running:
 
     # smooth adjustment of visible birds
     diff = len(birds_group) - Poid.options["num_birds"][2]
-    if diff > 0:
+    if diff > 1:
         birds_group.remove(birds_group.sprites()[0])
 
-    if diff < 0:
+    if diff < -1:
         birds_group.add(Poid(cfg))
 
     for bird in birds_group:
         bird.update_all(birds_group)
 
     # draw
-    screen.fill((0, 0, 0))
-    birds_group.draw(screen)
-    grid_render.draw(screen)
+    cfg.screen.fill((0, 0, 0))
+    birds_group.draw(cfg.screen)
+    grid_render.draw(cfg.screen)
 
     for slider in sliders:
         slider.valueBox.setText(slider.getValue())

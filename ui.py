@@ -14,19 +14,23 @@ class Group(Slider):
         self.value = v[2]
 
 
-def init_sliders(screen, bvars):
-    xpos = 10
-    wid = 100
-    incx = wid * 1.5
-    height = 30
-
-    ypos = 50
+def init_sliders(cfg, options):
 
     sliders = []
+    items = options.items()
+    total_options = len(items)
 
-    for k, v in bvars.items():
 
-        slider = Group(screen, xpos, ypos, wid, height, k, v)
+
+    xpos = 10
+    wid = (cfg.width / total_options) * 0.66
+    incx = wid * 1.5
+    height = 30
+    ypos = 50
+
+    for k, v in items:
+
+        slider = Group(cfg.screen, xpos, ypos, wid, height, k, v)
         sliders.append(slider)
 
         xpos += incx

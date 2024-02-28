@@ -9,14 +9,16 @@ class Poid(pygame.sprite.Sprite):
     # birds
     options = {
         # (min, max, default)
-        "num_birds": (1, 250, 32),
-        "cohesion_range": (1, 100, 30),
-        "separation_distance": (1, 100, 10),
-        "min_speed": (0.1, 1, 1),
-        "max_speed": (0.1, 50, 10),
-        "align_factor": (0.01, 1, 0.1),
-        "cohesion_factor": (0.0001, 0.01, 0.001),
-        "separation_factor": (0.2, 20, 2)
+        "num_birds": (1, 250, 100),
+        "cohesion_range": (1, 100, 50),
+        "separation_distance": (1, 100, 25),
+        "min_speed": (0.1, 5, 1),
+        "max_speed": (5, 10, 5),
+        "align_factor": (0.1, 10, 0.1),
+        "cohesion_factor": (0.1, 10, 0.1),
+        "separation_factor": (0.1, 10, 0.1),
+        "view_angle": (1, 360, 180),
+        "drift":(0.0, 1.0, 0.5 )
     }
 
     def __init__(self, cfg):
@@ -42,6 +44,23 @@ class Poid(pygame.sprite.Sprite):
         dy = (self.rect.y - other_bird.rect.y) ** 2
         return math.sqrt(dx + dy)
 
+    def get_angle(self, other_bird):
+
+        normal_velocity = self.velocity.normalize()
+        dot = round((normal_velocity.x * other_bird.rect.x) + (normal_velocity.y * other_bird.rect.y), 3)
+        bird_mag = round(self.velocity.normalize().magnitude(), 3)
+        other_bird_mag = round(math.sqrt(other_bird.rect.x ** 2 + other_bird.rect.y ** 2), 3)
+
+        if bird_mag == 0 or other_bird_mag == 0:
+            return 0
+
+        angle_radians = math.acos(dot / (bird_mag * other_bird_mag))
+        angle_degrees = math.degrees(angle_radians)
+
+        if angle_degrees > 180:
+            angle_degrees = abs(360 - angle_degrees)
+        return angle_degrees
+
     # finding all forces in one function to avoid looping more than once per bird
     def flocking(self, birds):
         self.acceleration.x, self.acceleration.y = 0, 0
@@ -54,7 +73,9 @@ class Poid(pygame.sprite.Sprite):
 
         for b in birds:
             d = self.get_distance(b)
-            if b is not self and self.options["cohesion_range"][2] > d:
+            a = int(self.get_angle(b))
+
+            if b is not self and self.options["cohesion_range"][2] > d and a < self.options["view_angle"][2]:
                 alignment_force += b.velocity
                 cohesion_force += b.rect.center
 
@@ -73,8 +94,8 @@ class Poid(pygame.sprite.Sprite):
             alignment_force -= self.velocity
             cohesion_force -= self.rect.center
 
-        steering_force += alignment_force * self.options["align_factor"][2]
-        steering_force += cohesion_force * self.options["cohesion_factor"][2]
+        steering_force += alignment_force * self.options["align_factor"][2] / 100
+        steering_force += cohesion_force * self.options["cohesion_factor"][2] / 1000
         steering_force += separation_force * self.options["separation_factor"][2]
 
         if steering_force.length() > 0:
@@ -88,6 +109,8 @@ class Poid(pygame.sprite.Sprite):
         self.flocking(birds)
         self.rect.center += self.velocity
         self.velocity += self.acceleration
+        drift = pygame.Vector2(ranf(0-self.options["drift"][2], self.options["drift"][2]), ranf(0-self.options["drift"][2], self.options["drift"][2]))
+        self.velocity += drift
 
         # clamp vector magnitude
         if self.velocity.magnitude() > self.options["max_speed"][2]:

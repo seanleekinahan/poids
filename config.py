@@ -4,3 +4,4 @@ class Config:
         self.height = cfg["height"]
         self.fps = cfg["target_fps"]
         self.cell_size = cfg["cell_size"]
+
