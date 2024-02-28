@@ -23,7 +23,7 @@ class Poid(pygame.sprite.Sprite):
         self.acceleration = pygame.Vector2(0, 0)
 
         # random per-bird attributes
-        self.strength = ranf(0.8, 1.2)
+        self.strength = ranf(0.1, 2.0)
 
     def get_distance(self, other_bird):
         dx = (self.rect.x - other_bird.rect.x) ** 2
@@ -69,8 +69,6 @@ class Poid(pygame.sprite.Sprite):
                 finally:
                     continue
 
-
-
         # 1. get current bird's cell, add to list
         # 2. get cohesion distance and round to find cell distance
         # 3. get neighbouring cells within rounded distance, add to list
@@ -78,9 +76,13 @@ class Poid(pygame.sprite.Sprite):
 
         for b in birds:
             d = self.get_distance(b)
-            a = int(self.get_angle(b))
 
-            if b is not self and options["cohesion_range"][2] > d and a < options["view_angle"][2]:
+            # angle calculation is resource heavy, default to 0 = off
+            a = 0
+            if options["view_angle"][2] > 0:
+                a = int(self.get_angle(b))
+
+            if b is not self and options["cohesion_range"][2] > d and a <= options["view_angle"][2]:
                 alignment_force += b.velocity
                 cohesion_force += b.rect.center
 
@@ -104,6 +106,7 @@ class Poid(pygame.sprite.Sprite):
         steering_force += alignment_force * options["align_factor"][2] / 100
         steering_force += cohesion_force * options["cohesion_factor"][2] / 1000
         steering_force += separation_force * options["separation_factor"][2]
+        steering_force = pygame.Vector2(round(steering_force.x, 2), round(steering_force.y, 2))
 
         if steering_force.magnitude() > 0:
             steering_force.scale_to_length(self.strength)
@@ -116,12 +119,14 @@ class Poid(pygame.sprite.Sprite):
         self.flocking(cells)
         self.rect.center += self.velocity
         self.velocity += self.acceleration
+        self.velocity = pygame.Vector2(round(self.velocity.x, 2), round(self.velocity.y, 2))
 
         # clamp vector magnitude
-        if self.velocity.magnitude() > options["max_speed"][2]:
+
+        if self.velocity.magnitude() > options["max_speed"][2] > 0:
             self.velocity.scale_to_length(options["max_speed"][2])
 
-        if self.velocity.magnitude() < options["min_speed"][2]:
+        if self.velocity.magnitude() < options["min_speed"][2] > 0:
             self.velocity.scale_to_length(options["min_speed"][2])
 
         # wrap around the screen
@@ -133,4 +138,3 @@ class Poid(pygame.sprite.Sprite):
             self.rect.bottom = 0
         elif self.rect.bottom < 0:
             self.rect.top = cfg["height"]
-

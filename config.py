@@ -8,7 +8,7 @@ cfg = {
 
 options = {
     # (min, max, default)
-    "num_birds": (1, 25000, 100),
+    "num_birds": (1, 500, 250),
     "cohesion_range": (1, 100, 50),
     "separation_distance": (1, 100, 15),
     "min_speed": (0.1, 5, 1),
@@ -16,5 +16,5 @@ options = {
     "align_factor": (0.1, 10, 1),
     "cohesion_factor": (0.1, 10, 0.1),
     "separation_factor": (0.1, 10, 10),
-    "view_angle": (1, 360, 220)
+    "view_angle": (0, 360, 0)
 }
