@@ -16,6 +16,5 @@ options = {
     "align_factor": (0.1, 10, 1),
     "cohesion_factor": (0.1, 10, 0.1),
     "separation_factor": (0.1, 10, 10),
-    "view_angle": (1, 360, 220),
-    "drift": (0.0, 1.0, 0)
+    "view_angle": (1, 360, 220)
 }

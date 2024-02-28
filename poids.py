@@ -69,6 +69,8 @@ class Poid(pygame.sprite.Sprite):
                 finally:
                     continue
 
+
+
         # 1. get current bird's cell, add to list
         # 2. get cohesion distance and round to find cell distance
         # 3. get neighbouring cells within rounded distance, add to list
@@ -114,9 +116,6 @@ class Poid(pygame.sprite.Sprite):
         self.flocking(cells)
         self.rect.center += self.velocity
         self.velocity += self.acceleration
-        drift = pygame.Vector2(ranf(0-options["drift"][2], options["drift"][2]),
-                               ranf(0-options["drift"][2], options["drift"][2]))
-        self.velocity += drift
 
         # clamp vector magnitude
         if self.velocity.magnitude() > options["max_speed"][2]:
